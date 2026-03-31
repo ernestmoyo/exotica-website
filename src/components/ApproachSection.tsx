@@ -1,92 +1,139 @@
-import { motion } from "framer-motion";
-import { useScrollAnimation } from "../hooks/useScrollAnimation";
+import { motion } from 'framer-motion';
 
-const PHASES = [
+interface Phase {
+  number: string;
+  title: string;
+  description: string;
+}
+
+const PHASES: readonly Phase[] = [
   {
-    number: "01",
-    title: "Client Briefing",
-    description: "Understand market, audience, goals",
+    number: '01',
+    title: 'Discovery',
+    description: 'Deep dive into your brand, market position, and business objectives to define the project scope.',
   },
   {
-    number: "02",
-    title: "Strategy & Planning",
-    description: "Brand objectives, KPIs, audience targeting",
+    number: '02',
+    title: 'Strategy',
+    description: 'Data-informed strategy development with clear KPIs, timelines, and resource allocation.',
   },
   {
-    number: "03",
-    title: "Recruitment & Training",
-    description: "Select and train field teams",
+    number: '03',
+    title: 'Design',
+    description: 'Creative concepting and campaign design tailored to Mauritian consumer behaviour and culture.',
   },
   {
-    number: "04",
-    title: "Pre-Event Coordination",
-    description: "Logistics, digital build-up",
+    number: '04',
+    title: 'Execute',
+    description: 'Flawless on-ground activation and digital deployment across targeted districts and channels.',
   },
   {
-    number: "05",
-    title: "Execution",
-    description: "On-ground engagement + real-time digital amplification",
+    number: '05',
+    title: 'Measure',
+    description: 'Rigorous data collection, statistical analysis, and real-time performance monitoring.',
   },
   {
-    number: "06",
-    title: "Reporting & Analysis",
-    description: "Data compilation, impact analysis, recommendations",
+    number: '06',
+    title: 'Optimise',
+    description: 'Continuous refinement based on insights, delivering compounding returns for your brand.',
   },
 ] as const;
 
-export default function ApproachSection() {
-  const { ref, isInView } = useScrollAnimation();
+const phaseVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: 'easeOut' },
+  }),
+};
 
+export default function ApproachSection() {
   return (
-    <section id="approach" className="relative py-24 lg:py-32">
-      <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <span className="text-gold text-sm tracking-widest uppercase font-medium">
-            How We Work
-          </span>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold mt-3 mb-6">
+    <section id="approach" className="section-padding bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <span className="badge-terra mb-4">How We Work</span>
+          <h2 className="text-4xl sm:text-5xl font-display font-bold text-ocean mt-4">
             Our 6-Phase Approach
           </h2>
-          <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-            A proven methodology that ensures every activation delivers measurable impact.
+          <p className="mt-6 text-lg text-ocean/60 max-w-2xl mx-auto">
+            A proven methodology that transforms brand challenges into measurable growth,
+            from the first conversation to ongoing optimisation.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Connecting line (desktop) */}
-          <div className="hidden lg:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        {/* Desktop: horizontal timeline */}
+        <div className="hidden lg:block">
+          <div className="relative">
+            {/* Connecting line */}
+            <div className="absolute top-8 left-8 right-8 h-0.5 bg-cream-dark" />
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-6">
-            {PHASES.map((phase, index) => (
-              <motion.div
-                key={phase.number}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
-                className="relative"
-              >
-                {/* Phase card */}
-                <div className="glass-card-hover rounded-xl p-6 h-full">
-                  {/* Number badge */}
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gold/10 border border-gold/20 mb-4">
-                    <span className="text-gold font-display font-bold text-sm">
-                      {phase.number}
-                    </span>
+            <div className="grid grid-cols-6 gap-4 relative">
+              {PHASES.map((phase, i) => (
+                <motion.div
+                  key={phase.number}
+                  className="flex flex-col items-center text-center"
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-50px' }}
+                  variants={phaseVariants}
+                >
+                  {/* Numbered circle */}
+                  <div className="w-16 h-16 rounded-full bg-terra text-white font-display font-bold text-lg flex items-center justify-center relative z-10 shadow-lg shadow-terra/20">
+                    {phase.number}
                   </div>
 
-                  <h3 className="text-lg font-semibold mb-2">{phase.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    {phase.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+                  {/* Card */}
+                  <div className="card mt-6 p-5 w-full">
+                    <h3 className="text-base font-semibold text-ocean mb-2">
+                      {phase.title}
+                    </h3>
+                    <p className="text-xs text-ocean/55 leading-relaxed">
+                      {phase.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile/tablet: vertical timeline */}
+        <div className="lg:hidden">
+          <div className="relative pl-10">
+            {/* Vertical connecting line */}
+            <div className="absolute top-0 bottom-0 left-[19px] w-0.5 bg-cream-dark" />
+
+            <div className="space-y-8">
+              {PHASES.map((phase, i) => (
+                <motion.div
+                  key={phase.number}
+                  className="relative flex gap-6"
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-30px' }}
+                  variants={phaseVariants}
+                >
+                  {/* Numbered circle */}
+                  <div className="absolute -left-10 w-10 h-10 rounded-full bg-terra text-white font-display font-bold text-sm flex items-center justify-center z-10 shadow-md shadow-terra/20">
+                    {phase.number}
+                  </div>
+
+                  {/* Card */}
+                  <div className="card p-6 flex-1">
+                    <h3 className="text-lg font-semibold text-ocean mb-2">
+                      {phase.title}
+                    </h3>
+                    <p className="text-sm text-ocean/55 leading-relaxed">
+                      {phase.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

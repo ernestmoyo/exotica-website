@@ -1,80 +1,111 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import ExoticaLogo from './ExoticaLogo';
 
 const NAV_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Brand Intelligence", href: "#brand-intelligence" },
-  { label: "Approach", href: "#approach" },
-  { label: "Team", href: "#team" },
-  { label: "Contact", href: "#contact" },
+  { label: 'About', href: '#about' },
+  { label: 'Services', href: '#services' },
+  { label: 'Approach', href: '#approach' },
+  { label: 'Intelligence', href: '#intelligence' },
+  { label: 'Team', href: '#team' },
+  { label: 'Contact', href: '#contact' },
 ] as const;
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    function handleScroll() {
+      setScrolled(window.scrollY > 20);
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLinkClick = () => {
-    setIsMobileOpen(false);
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0.1 }
+    );
+
+    NAV_LINKS.forEach(({ href }) => {
+      const el = document.querySelector(href);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+    <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-navy-900/90 backdrop-blur-lg border-b border-gold/10 shadow-lg"
-          : "bg-transparent"
+        scrolled
+          ? 'bg-white/90 backdrop-blur-md shadow-sm shadow-black/5'
+          : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          <a href="#hero" className="flex items-center gap-2 group">
-            <span className="text-lg lg:text-xl font-display font-bold tracking-wider gradient-text group-hover:opacity-80 transition-opacity">
-              EXOTICA AGENCY
-            </span>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+        <div className="flex items-center justify-between h-20">
+          <a href="#" className="relative z-50">
+            <ExoticaLogo size="small" color="dark" variant="full" />
           </a>
 
           {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map(({ label, href }) => (
               <a
-                key={link.href}
-                href={link.href}
-                className="text-sm text-slate-300 hover:text-gold transition-colors duration-200 tracking-wide"
+                key={href}
+                href={href}
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  activeSection === href.slice(1)
+                    ? 'text-terra'
+                    : 'text-ocean hover:text-terra'
+                }`}
               >
-                {link.label}
+                {label}
               </a>
             ))}
+            <a href="#contact" className="btn-primary text-sm">
+              Get in Touch
+            </a>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            onClick={() => setIsMobileOpen((prev) => !prev)}
-            className="lg:hidden flex flex-col gap-1.5 p-2"
+            className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+            onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
           >
-            <motion.span
-              animate={isMobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className="block w-6 h-0.5 bg-gold"
+            <span
+              className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                mobileOpen ? 'rotate-45 translate-y-2' : ''
+              }`}
             />
-            <motion.span
-              animate={isMobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="block w-6 h-0.5 bg-gold"
+            <span
+              className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                mobileOpen ? 'opacity-0' : ''
+              }`}
             />
-            <motion.span
-              animate={isMobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className="block w-6 h-0.5 bg-gold"
+            <span
+              className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                mobileOpen ? '-rotate-45 -translate-y-2' : ''
+              }`}
             />
           </button>
         </div>
@@ -82,28 +113,40 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <AnimatePresence>
-        {isMobileOpen && (
+        {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-navy-900/95 backdrop-blur-lg border-b border-gold/10"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25 }}
+            className="md:hidden fixed inset-0 bg-white z-40 pt-24 px-8"
           >
-            <div className="px-4 py-4 flex flex-col gap-3">
-              {NAV_LINKS.map((link) => (
+            <div className="flex flex-col gap-6">
+              {NAV_LINKS.map(({ label, href }) => (
                 <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={handleLinkClick}
-                  className="text-slate-300 hover:text-gold transition-colors py-2 px-3 rounded-lg hover:bg-white/5"
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`text-2xl font-display font-semibold transition-colors ${
+                    activeSection === href.slice(1)
+                      ? 'text-terra'
+                      : 'text-ocean'
+                  }`}
                 >
-                  {link.label}
+                  {label}
                 </a>
               ))}
+              <a
+                href="#contact"
+                onClick={() => setMobileOpen(false)}
+                className="btn-primary text-center mt-4"
+              >
+                Get in Touch
+              </a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </nav>
   );
 }
