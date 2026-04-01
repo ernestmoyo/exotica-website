@@ -52,8 +52,8 @@ export default function Footer() {
               <a href="mailto:hello@exotica.mu" className="block hover:text-white transition-colors">
                 hello@exotica.mu
               </a>
-              <a href="tel:+2305XXXXXXX" className="block hover:text-white transition-colors">
-                +230 5XXX XXXX
+              <a href="tel:+23058294167" className="block hover:text-white transition-colors">
+                +230 5829 4167
               </a>
             </div>
           </div>
@@ -65,7 +65,14 @@ export default function Footer() {
             &copy; {year} Exotica Agency. All rights reserved.
           </p>
           <p className="text-xs text-white/20">
-            Crafted in Mauritius
+            Developed by{' '}
+            <a href="https://7squareinc.com" target="_blank" rel="noopener noreferrer" className="text-gold/60 hover:text-gold transition-colors">
+              7squareinc.com
+            </a>
+            {' | '}
+            <a href="mailto:info@7squareinc.com" className="text-gold/60 hover:text-gold transition-colors">
+              info@7squareinc.com
+            </a>
           </p>
         </div>
       </div>

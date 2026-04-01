@@ -23,8 +23,8 @@ const CONTACT_INFO = [
       </svg>
     ),
     label: 'Phone',
-    value: '+230 5XXX XXXX',
-    href: 'tel:+2305XXXXXXX',
+    value: '+230 5829 4167',
+    href: 'tel:+23058294167',
   },
   {
     icon: (
