@@ -4,15 +4,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        cream: { DEFAULT: '#FAF7F2', dark: '#F0EBE3' },
-        terra: { DEFAULT: '#C8553D', dark: '#A3412E', light: '#D97B6A' },
-        ocean: { DEFAULT: '#2D3E50', light: '#3D5166', dark: '#1E2D3D' },
-        gold: { DEFAULT: '#D4A853', light: '#E4C47A', dark: '#B8903E' },
-        forest: { DEFAULT: '#3D8B6E', dark: '#2D6A4F', light: '#52B788' },
+        cream: { DEFAULT: '#F2EDE3', dark: '#E6DFD0', light: '#F8F4EB' },
+        ink: { DEFAULT: '#111111', soft: '#1C1C1C', mid: '#2A2A2A' },
+        ocean: { DEFAULT: '#111111', light: '#2A2A2A', dark: '#0A0A0A' },
+        terra: { DEFAULT: '#9C5440', dark: '#7A3E2D', light: '#BA7460' },
+        gold: { DEFAULT: '#B8935B', light: '#D4B583', dark: '#8E6E40' },
+        forest: { DEFAULT: '#5C7A6A', dark: '#3E5C4D', light: '#7E9D8C' },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Fraunces', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      letterSpacing: {
+        editorial: '0.32em',
+      },
+      maxWidth: {
+        prose: '65ch',
       },
     },
   },

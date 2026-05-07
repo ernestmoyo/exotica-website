@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" fill="none" role="img" aria-label="Exotica Agency monogram">
+  <!-- E and A letters, centered. Uses Fraunces if available, falls back to a serif. -->
+  <g font-family="Fraunces, 'Times New Roman', Georgia, serif" fill="currentColor">
+    <!-- Letters -->
+    <text x="60" y="115" text-anchor="middle" font-size="100" font-weight="600" letter-spacing="2">E</text>
+    <text x="140" y="115" text-anchor="middle" font-size="100" font-weight="600" letter-spacing="2">A</text>
+    <!-- Vertical hairline divider between letters -->
+    <line x1="100" y1="38" x2="100" y2="120" stroke="currentColor" stroke-width="1" opacity="0.55"/>
+    <!-- Bottom subtitle -->
+    <text x="100" y="158" text-anchor="middle" font-size="11" letter-spacing="6" font-weight="400">EXOTICA &#8226; AGENCY</text>
+  </g>
+</svg>

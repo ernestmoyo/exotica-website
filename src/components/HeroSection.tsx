@@ -1,118 +1,123 @@
 import { motion } from 'framer-motion';
+import ExoticaLogo from './ExoticaLogo';
 
-const WORDS = ['Brand Activation', '&', 'Market Research'];
+const MARQUEE_ITEMS = [
+  'Brand Activation',
+  'Hostess Services',
+  'Market Research',
+  'Digital Marketing',
+  '360° Campaigns',
+  'Mystery Shopping',
+  'Price Monitoring',
+];
 
-function WordReveal({ word, index }: { word: string; index: number }) {
+function Marquee() {
+  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
   return (
-    <span className="inline-block overflow-hidden">
-      <motion.span
-        className="inline-block"
-        initial={{ y: '100%', opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.3 + index * 0.15, duration: 0.6, ease: 'easeOut' }}
-      >
-        {word}
-      </motion.span>
-    </span>
-  );
-}
-
-function ScrollIndicator() {
-  return (
-    <motion.div
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.5 }}
-    >
-      <span className="text-xs text-ocean/50 uppercase tracking-[0.2em]">Scroll</span>
-      <motion.div
-        className="w-5 h-8 rounded-full border-2 border-ocean/20 flex justify-center pt-1.5"
-        animate={{ opacity: [1, 0.5, 1] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <motion.div
-          className="w-1 h-2 rounded-full bg-terra"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        />
-      </motion.div>
-    </motion.div>
+    <div className="overflow-hidden border-y border-ink/10 bg-cream/40 py-6 relative">
+      <div className="flex animate-marquee w-max">
+        {items.map((item, i) => (
+          <div key={i} className="flex items-center">
+            <span className="marquee-item">{item}</span>
+            <span className="text-ink/30 text-2xl">&#x2756;</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream">
-      {/* Gradient blobs */}
-      <div className="blob w-[500px] h-[500px] bg-terra -top-32 -right-32" style={{ animation: 'pulse-glow 6s ease-in-out infinite' }} />
-      <div className="blob w-[400px] h-[400px] bg-gold top-1/3 -left-40" style={{ animation: 'pulse-glow 8s ease-in-out infinite 1s' }} />
-      <div className="blob w-[350px] h-[350px] bg-forest bottom-20 right-1/4" style={{ animation: 'pulse-glow 7s ease-in-out infinite 2s' }} />
+    <section className="relative min-h-screen flex flex-col bg-cream pt-24 noise">
+      <div className="flex-1 flex items-center px-6 md:px-12 lg:px-20">
+        <div className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Left: copy */}
+          <div className="lg:col-span-7">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="eyebrow mb-8"
+            >
+              Mauritius &middot; Est. 2024
+            </motion.div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        {/* Overline badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.5 }}
-        >
-          <span className="badge-terra">
-            Brand Activation & Market Research
-          </span>
-        </motion.div>
+            <motion.h1
+              className="font-display text-ink text-[12vw] sm:text-[10vw] lg:text-[7.5vw] xl:text-[6.5vw] leading-[0.95] font-light tracking-[-0.02em]"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <span className="block">Immersive</span>
+              <span className="block italic font-normal">brand</span>
+              <span className="block">experiences,</span>
+              <span className="block text-ink/40">online &amp; offline.</span>
+            </motion.h1>
 
-        {/* Main headline */}
-        <h1 className="mt-8 text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-ocean leading-[1.1]">
-          <span className="block">
-            <WordReveal word="EXOTICA" index={0} />
-          </span>
-          <span className="block mt-1 text-terra">
-            <WordReveal word="AGENCY" index={1} />
-          </span>
-        </h1>
+            <motion.div
+              className="mt-10 max-w-xl"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+            >
+              <p className="text-base sm:text-lg text-ink/70 leading-relaxed">
+                We create seamless brand experiences that blend on-the-ground engagement
+                with digital amplification &mdash; ensuring maximum reach and measurable impact
+                across Mauritius.
+              </p>
+            </motion.div>
 
-        {/* Subtitle */}
-        <motion.p
-          className="mt-6 text-lg sm:text-xl text-ocean/70 font-light max-w-2xl mx-auto leading-relaxed"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-        >
-          We bring brands to life across Mauritius through strategic activations,
-          data-driven research, and creative campaigns that deliver real results.
-        </motion.p>
+            <motion.div
+              className="mt-12 flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55, duration: 0.6 }}
+            >
+              <a href="#services" className="btn-primary">
+                View Services <span aria-hidden>&rarr;</span>
+              </a>
+              <a href="#contact" className="btn-outline">
+                Start a Project
+              </a>
+            </motion.div>
 
-        {/* CTAs */}
-        <motion.div
-          className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
-        >
-          <a href="#services" className="btn-primary">
-            Our Services
-          </a>
-          <a href="#contact" className="btn-outline">
-            Work With Us
-          </a>
-        </motion.div>
+            <motion.div
+              className="mt-14 flex items-center gap-8 text-[11px] uppercase tracking-[0.25em] text-ink/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.6 }}
+            >
+              <span>FMCG</span>
+              <span className="w-1 h-1 rounded-full bg-ink/30" />
+              <span>Retail</span>
+              <span className="w-1 h-1 rounded-full bg-ink/30" />
+              <span>Hospitality</span>
+              <span className="w-1 h-1 rounded-full bg-ink/30" />
+              <span>Pharma</span>
+            </motion.div>
+          </div>
 
-        {/* Location badge */}
-        <motion.div
-          className="mt-12 inline-flex items-center gap-2 text-sm text-ocean/50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          Port Louis, Mauritius
-        </motion.div>
+          {/* Right: monogram tile */}
+          <motion.div
+            className="lg:col-span-5 flex justify-center lg:justify-end"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.7, ease: 'easeOut' }}
+          >
+            <div className="relative">
+              <div className="absolute -inset-6 border border-ink/15" aria-hidden />
+              <div className="absolute -inset-12 border border-ink/8" aria-hidden />
+              <ExoticaLogo size="hero" tone="cream" tile="ink" variant="mark" showSubtitle={true} />
+              <div className="mt-6 text-center text-[10px] uppercase tracking-[0.4em] text-ink/40">
+                Combining On-Ground Excellence with Digital Impact
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      <ScrollIndicator />
+      <Marquee />
     </section>
   );
 }

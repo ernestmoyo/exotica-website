@@ -1,228 +1,206 @@
 interface ExoticaLogoProps {
   className?: string;
-  size?: 'small' | 'default' | 'large';
-  variant?: 'full' | 'icon' | 'wordmark';
-  color?: 'gold' | 'dark' | 'white';
+  size?: 'small' | 'default' | 'large' | 'hero';
+  /** 'mark' = boxed monogram tile (matches PNG); 'open' = transparent, no tile */
+  variant?: 'mark' | 'open' | 'wordmark';
+  /** Color of the EA letters and subtitle */
+  tone?: 'ink' | 'cream' | 'gold';
+  /** Tile background color when variant === 'mark'. 'transparent' renders with no fill. */
+  tile?: 'ink' | 'cream' | 'transparent';
+  showSubtitle?: boolean;
 }
 
 const SIZE_MAP = {
-  small: { icon: 28, fontSize: 16, subtitleSize: 8, gap: 8 },
-  default: { icon: 40, fontSize: 22, subtitleSize: 10, gap: 10 },
-  large: { icon: 56, fontSize: 32, subtitleSize: 14, gap: 14 },
+  small: { box: 36, letter: 18, subtitle: 6, gap: 8, wordmark: 14 },
+  default: { box: 56, letter: 28, subtitle: 8, gap: 10, wordmark: 18 },
+  large: { box: 96, letter: 48, subtitle: 11, gap: 14, wordmark: 28 },
+  hero: { box: 200, letter: 100, subtitle: 14, gap: 18, wordmark: 44 },
 } as const;
 
-const COLOR_MAP = {
-  gold: '#D4A853',
-  dark: '#2D3E50',
-  white: '#FFFFFF',
+const TONE_MAP = {
+  ink: '#111111',
+  cream: '#F2EDE3',
+  gold: '#B8935B',
 } as const;
 
-function StarIcon({ size, fill }: { size: number; fill: string }) {
+const TILE_MAP = {
+  ink: '#111111',
+  cream: '#F2EDE3',
+  transparent: 'transparent',
+} as const;
+
+function MonogramTile({
+  size,
+  tone,
+  tile,
+  showSubtitle,
+}: {
+  size: typeof SIZE_MAP[keyof typeof SIZE_MAP];
+  tone: 'ink' | 'cream' | 'gold';
+  tile: 'ink' | 'cream' | 'transparent';
+  showSubtitle: boolean;
+}) {
+  const fill = TONE_MAP[tone];
+  const bg = TILE_MAP[tile];
+  const borderColor = tile === 'transparent' ? fill : 'transparent';
+
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <div
+      className="relative inline-flex flex-col items-center justify-center select-none"
+      style={{
+        width: size.box,
+        height: size.box,
+        background: bg,
+        border: tile === 'transparent' ? `1px solid ${fill}33` : 'none',
+        boxSizing: 'border-box',
+      }}
+      aria-hidden="true"
     >
-      {/* 4-point star, elongated top */}
-      <path
-        d="M32 2L38 24H26L32 2Z"
-        fill={fill}
-      />
-      <path
-        d="M32 62L26 40H38L32 62Z"
-        fill={fill}
-      />
-      <path
-        d="M2 32L24 26V38L2 32Z"
-        fill={fill}
-      />
-      <path
-        d="M62 32L40 38V26L62 32Z"
-        fill={fill}
-      />
-      {/* Diagonal compass points */}
-      <path
-        d="M12 12L28 24L20 28L12 12Z"
-        fill={fill}
-        opacity="0.7"
-      />
-      <path
-        d="M52 12L44 28L36 24L52 12Z"
-        fill={fill}
-        opacity="0.7"
-      />
-      <path
-        d="M12 52L20 36L28 40L12 52Z"
-        fill={fill}
-        opacity="0.7"
-      />
-      <path
-        d="M52 52L36 40L44 36L52 52Z"
-        fill={fill}
-        opacity="0.7"
-      />
-      {/* Center circle */}
-      <circle cx="32" cy="32" r="6" fill={fill} />
-    </svg>
+      {/* Letters */}
+      <div
+        className="flex items-baseline relative"
+        style={{
+          fontFamily: 'Fraunces, Georgia, serif',
+          fontWeight: 600,
+          color: fill,
+          letterSpacing: '0.04em',
+          fontSize: size.letter,
+          lineHeight: 1,
+          marginTop: showSubtitle ? size.box * 0.05 : 0,
+        }}
+      >
+        <span style={{ fontStyle: 'normal', paddingRight: size.letter * 0.18 }}>E</span>
+        <span
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '8%',
+            bottom: showSubtitle ? '32%' : '8%',
+            width: 1,
+            background: fill,
+            opacity: 0.55,
+            transform: 'translateX(-50%)',
+          }}
+        />
+        <span style={{ fontStyle: 'normal', paddingLeft: size.letter * 0.18 }}>A</span>
+      </div>
+
+      {showSubtitle && (
+        <div
+          style={{
+            color: fill,
+            fontFamily: 'Inter, sans-serif',
+            fontSize: size.subtitle,
+            letterSpacing: '0.45em',
+            marginTop: size.subtitle * 0.6,
+            paddingLeft: '0.45em',
+            opacity: 0.85,
+          }}
+        >
+          EXOTICA&nbsp;&middot;&nbsp;AGENCY
+        </div>
+      )}
+
+      {/* Decorative border lines accents (subtle) */}
+      {tile !== 'transparent' && (
+        <>
+          <span
+            style={{
+              position: 'absolute',
+              top: size.box * 0.08,
+              left: size.box * 0.08,
+              right: size.box * 0.08,
+              height: 1,
+              background: fill,
+              opacity: 0,
+            }}
+          />
+          <span
+            style={{
+              position: 'absolute',
+              bottom: size.box * 0.08,
+              left: size.box * 0.08,
+              right: size.box * 0.08,
+              height: 1,
+              background: fill,
+              opacity: 0,
+            }}
+          />
+        </>
+      )}
+
+      {/* keep TS happy with borderColor reference */}
+      <span style={{ display: 'none' }} data-bc={borderColor} />
+    </div>
   );
 }
 
-function WordmarkSvg({
-  fontSize,
-  fill,
+function Wordmark({
+  size,
+  tone,
 }: {
-  fontSize: number;
-  fill: string;
+  size: typeof SIZE_MAP[keyof typeof SIZE_MAP];
+  tone: 'ink' | 'cream' | 'gold';
 }) {
-  const scale = fontSize / 22;
-  const width = Math.round(160 * scale);
-  const height = Math.round(28 * scale);
+  const fill = TONE_MAP[tone];
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox="0 0 160 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* E */}
-      <path
-        d="M0 2H18V7H6V11.5H16V16.5H6V21H18V26H0V2Z"
-        fill={fill}
-      />
-      {/* X */}
-      <path
-        d="M22 2H29L33.5 10.5L38 2H45L37 14L45.5 26H38.5L33.5 17L28.5 26H21.5L30 14L22 2Z"
-        fill={fill}
-      />
-      {/* O */}
-      <path
-        d="M56 1C63.5 1 69 7 69 14C69 21 63.5 27 56 27C48.5 27 43 21 43 14C43 7 48.5 1 56 1ZM56 6.5C51.8 6.5 49 9.8 49 14C49 18.2 51.8 21.5 56 21.5C60.2 21.5 63 18.2 63 14C63 9.8 60.2 6.5 56 6.5Z"
-        fill={fill}
-      />
-      {/* T */}
-      <path
-        d="M70 2H90V7H83V26H77V7H70V2Z"
-        fill={fill}
-      />
-      {/* I */}
-      <path
-        d="M92 2H98V26H92V2Z"
-        fill={fill}
-      />
-      {/* C */}
-      <path
-        d="M112 1C119.5 1 124 5.5 125 10H119C118.2 8 115.8 6.5 112 6.5C107.8 6.5 105 9.8 105 14C105 18.2 107.8 21.5 112 21.5C115.8 21.5 118.2 20 119 18H125C124 22.5 119.5 27 112 27C104.5 27 99 21 99 14C99 7 104.5 1 112 1Z"
-        fill={fill}
-      />
-      {/* A */}
-      <path
-        d="M126 26L137 2H143L154 26H148L145.5 20H134.5L132 26H126ZM136.5 15.5H143.5L140 7L136.5 15.5Z"
-        fill={fill}
-      />
-    </svg>
-  );
-}
-
-function SubtitleSvg({
-  subtitleSize,
-  fill,
-}: {
-  subtitleSize: number;
-  fill: string;
-}) {
-  const scale = subtitleSize / 10;
-  const width = Math.round(100 * scale);
-  const height = Math.round(12 * scale);
-  return (
-    <svg
-      width={width}
-      height={height}
-      viewBox="0 0 100 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* A */}
-      <path
-        d="M0 12L5.5 0H8.5L14 12H11L9.8 9H4.2L3 12H0ZM5 7H9L7 2L5 7Z"
-        fill={fill}
-        opacity="0.6"
-      />
-      {/* G */}
-      <path
-        d="M20 0C24 0 27 2.5 27 6C27 9.5 24 12 20 12C16 12 13 9.5 13 6C13 2.5 16 0 20 0ZM20 2.5C17.5 2.5 16 4 16 6C16 8 17.5 9.5 20 9.5C22 9.5 23.2 8.5 23.8 7H20V5H27V6C27 9.5 24 12 20 12C16 12 13 9.5 13 6C13 2.5 16 0 20 0Z"
-        fill={fill}
-        opacity="0.6"
-      />
-      {/* E */}
-      <path
-        d="M30 0H40V2.5H33V4.5H39V7H33V9.5H40V12H30V0Z"
-        fill={fill}
-        opacity="0.6"
-      />
-      {/* N */}
-      <path
-        d="M43 0H46L52 8V0H55V12H52L46 4V12H43V0Z"
-        fill={fill}
-        opacity="0.6"
-      />
-      {/* C */}
-      <path
-        d="M63 0C67 0 69 2 69.5 4.5H66.5C66 3.2 64.8 2.5 63 2.5C60.5 2.5 59 4 59 6C59 8 60.5 9.5 63 9.5C64.8 9.5 66 8.8 66.5 7.5H69.5C69 10 67 12 63 12C59 12 56 9.5 56 6C56 2.5 59 0 63 0Z"
-        fill={fill}
-        opacity="0.6"
-      />
-      {/* Y */}
-      <path
-        d="M72 0H75L78.5 5L82 0H85L80 7V12H77V7L72 0Z"
-        fill={fill}
-        opacity="0.6"
-      />
-    </svg>
+    <div className="flex flex-col leading-none" style={{ color: fill }}>
+      <span
+        style={{
+          fontFamily: 'Fraunces, Georgia, serif',
+          fontWeight: 600,
+          fontSize: size.wordmark,
+          letterSpacing: '0.06em',
+          lineHeight: 1,
+        }}
+      >
+        EXOTICA
+      </span>
+      <span
+        style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: Math.max(8, size.wordmark * 0.32),
+          letterSpacing: '0.5em',
+          marginTop: size.wordmark * 0.3,
+          paddingLeft: '0.5em',
+          opacity: 0.7,
+        }}
+      >
+        AGENCY
+      </span>
+    </div>
   );
 }
 
 export default function ExoticaLogo({
   className = '',
   size = 'default',
-  variant = 'full',
-  color = 'dark',
+  variant = 'mark',
+  tone = 'ink',
+  tile = 'ink',
+  showSubtitle = true,
 }: ExoticaLogoProps) {
-  const dimensions = SIZE_MAP[size];
-  const fill = COLOR_MAP[color];
-
-  if (variant === 'icon') {
-    return (
-      <div className={className}>
-        <StarIcon size={dimensions.icon} fill={fill} />
-      </div>
-    );
-  }
+  const dim = SIZE_MAP[size];
 
   if (variant === 'wordmark') {
     return (
-      <div className={`flex flex-col ${className}`}>
-        <WordmarkSvg fontSize={dimensions.fontSize} fill={fill} />
-        <SubtitleSvg subtitleSize={dimensions.subtitleSize} fill={fill} />
+      <div className={className}>
+        <Wordmark size={dim} tone={tone} />
       </div>
     );
   }
 
+  // 'mark' uses the configured tile (default 'ink' to match the PNG).
+  // 'open' forces a transparent tile and inverts subtitle visibility for compact lockups.
+  const effectiveTile = variant === 'open' ? 'transparent' : tile;
+  const effectiveSubtitle = variant === 'open' ? false : showSubtitle;
+
   return (
-    <div
-      className={`flex items-center ${className}`}
-      style={{ gap: dimensions.gap }}
-    >
-      <StarIcon size={dimensions.icon} fill={fill} />
-      <div className="flex flex-col">
-        <WordmarkSvg fontSize={dimensions.fontSize} fill={fill} />
-        <div style={{ marginTop: 2 }}>
-          <SubtitleSvg subtitleSize={dimensions.subtitleSize} fill={fill} />
-        </div>
-      </div>
+    <div className={`inline-flex items-center gap-3 ${className}`}>
+      <MonogramTile size={dim} tone={tone} tile={effectiveTile} showSubtitle={effectiveSubtitle} />
+      {variant === 'mark' && (
+        <Wordmark size={dim} tone={tone === 'cream' ? 'cream' : tone} />
+      )}
     </div>
   );
 }

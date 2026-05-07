@@ -3,8 +3,9 @@ import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
 import ServicesSection from './components/ServicesSection';
 import ApproachSection from './components/ApproachSection';
-import BrandIntelligenceSection from './components/BrandIntelligenceSection';
+import InActionSection from './components/InActionSection';
 import TeamSection from './components/TeamSection';
+import PackagesSection from './components/PackagesSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -18,8 +19,9 @@ export default function App() {
         <AboutSection />
         <ServicesSection />
         <ApproachSection />
-        <BrandIntelligenceSection />
+        <InActionSection />
         <TeamSection />
+        <PackagesSection />
         <ContactSection />
       </main>
       <Footer />
